@@ -71,21 +71,45 @@ async fn main() {
 
     let mut current_color: Color = WHITE;
 
-    let mut red_button = Button::new(70, screen_height() as i32 - 30, "RED".to_string(), 90, 5);
+    let mut CurrentX = 70;
 
-    let mut orange_button = Button::new(260, screen_height() as i32 - 30, "ORANGE".to_string(), 90, 5);
+    let mut CurrentY = screen_height() as i32 - 30;
 
-    let mut yellow_button = Button::new(510, screen_height() as i32 - 30, "YELLOW".to_string(), 90, 5);
+    let mut red_button = Button::new(70, CurrentY, "RED".to_string(), 90, 5);
 
-    let mut green_button = Button::new(740, screen_height() as i32 - 30, "GREEN".to_string(), 90, 5);
+    CurrentX = 260;
+    let mut orange_button = Button::new(CurrentX /*260*/, CurrentY, "ORANGE".to_string(), 90, 5);
 
-    let mut blue_button = Button::new(930, screen_height() as i32 - 30, "BLUE".to_string(), 90, 5);
+    CurrentX = 510;
+    let mut yellow_button = Button::new(CurrentX /*510*/, CurrentY, "YELLOW".to_string(), 90, 5);
 
-    let mut purple_button = Button::new(1140, screen_height() as i32 - 30, "PURPLE".to_string(), 90, 5);
+    CurrentX = 740;
+    let mut green_button = Button::new(CurrentX /*740*/, CurrentY, "GREEN".to_string(), 90, 5);
 
-    let mut white_button = Button::new(1370, screen_height() as i32 - 30, "WHITE".to_string(), 90, 5);
+    CurrentX = 930;
+    if screen_width() < 1100.0{
+        CurrentX = 90;
+        CurrentY -= 90;
+    }
+    let mut blue_button = Button::new(CurrentX /*930*/, CurrentY, "BLUE".to_string(), 90, 5);
 
-    let mut eraser_button = Button::new(1580, screen_height() as i32 - 30, "ERASE".to_string(), 90, 5);
+    CurrentX = 1140;
+        if screen_width() < 1100.0{
+        CurrentX = 300;
+    }
+    let mut purple_button = Button::new(CurrentX /*1140*/, CurrentY, "PURPLE".to_string(), 90, 5);
+
+    CurrentX = 1370;
+        if screen_width() < 1100.0{
+        CurrentX = 530;
+    }
+    let mut white_button = Button::new(CurrentX /*1370*/, CurrentY, "WHITE".to_string(), 90, 5);
+
+    CurrentX = 1580;
+        if screen_width() < 1100.0{
+        CurrentX = 740;
+    }
+    let mut eraser_button = Button::new(CurrentX /*1580*/, CurrentY, "ERASE".to_string(), 90, 5);
 
     let mut radius = 10.0;
 
@@ -93,7 +117,9 @@ async fn main() {
         let pos = mouse_position();
         draw_circle(pos.0, pos.1, 10.0, Color { r: current_color.r, g: current_color.g, b: current_color.b, a: 0.45 });
         if is_mouse_button_down(MouseButton::Left){
-            canvas.push(Circle { x: pos.0, y: pos.1, r: radius, color: current_color});
+            if pos.1 < eraser_button.y as f32 - eraser_button.text_dimensions.height as f32/2.0 - eraser_button.padding as f32{
+                canvas.push(Circle { x: pos.0, y: pos.1, r: radius, color: current_color});
+            }
             if red_button.is_over(pos.0 as i32,pos.1 as i32){
                 current_color = RED;
                 radius = 10.0; //get rid of radius when you add radius changer button
